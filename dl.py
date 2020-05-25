@@ -7,12 +7,14 @@ EX = 'm4a'
 
 class Audio:
     def __init__(self, url):
-        self._audio = pafy.new(url).getbestaudio(preftype=EX)
+        self._video = pafy.new(url)
+        self._audio = self._video.getbestaudio(preftype=EX)
         self._title = self._audio.title
         self._caption = '@yt_audio_dl_bot'
-        self._performer = PREF
-        self._filename = (f'{self._title}.{EX}').replace('?', '').replace('\\', '').replace('/', '').replace('|', '')
-        self._audio.download(filepath=os.path.join('temp_audios', self._filename))
+        self._performer = self._video.author
+        self._filename = (f'{self._title}.{EX}').\
+            replace('?', '').replace('\\', '').replace('/', '').replace('|', '').replace(':', '')
+        self._audio.download(filepath=os.path.join('temp_audios', self._filename), quiet=True)
         self._tg_file = InputFile(os.path.join('temp_audios', self._filename))
 
     def get_audio(self):
